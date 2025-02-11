@@ -50,7 +50,7 @@ const Payment = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-r from-yellow-400 to-orange-500 flex flex-col items-center p-6">
+        <div className="min-h-screen bg-gradient-to-r from-blue-600 to-purple-700 flex flex-col items-center p-6">
             <div className="bg-white p-6 rounded-lg shadow-xl max-w-3xl w-full">
                 <button onClick={() => navigate(-1)} className="flex items-center text-blue-500 font-semibold mb-4">
                     <FaArrowLeft className="mr-2" /> Back

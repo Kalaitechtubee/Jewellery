@@ -8,60 +8,62 @@ import products from '../components/products';
 const Home = () => {
     const [category, setCategory] = useState("All");
 
-    const filteredProducts = category === "All" 
-        ? products 
+    // Filter products based on selected category
+    const filteredProducts = category === "All"
+        ? products
         : products.filter(product => product.category === category);
 
-    // Apply 10% discount to all items
+    // Apply 10% discount and format price to 2 decimal places
     const discountedProducts = filteredProducts.map(product => ({
         ...product,
-        discountedPrice: product.price * 0.9, // 10% discount
+        discountedPrice: (product.price * 0.9).toFixed(2), // Ensure two decimal places
     }));
 
     return (
         <div className="min-h-screen flex flex-col bg-indigo-900 text-white">
             <Navbar />
-            <div className="bg-gradient-to-r from-purple-600 via-blue-500 to-teal-400 py-24 text-white text-center shadow-lg">
-                <h1 className="text-6xl font-extrabold tracking-wide font-serif">Welcome to Royal Gems</h1>
-                <p className="text-xl mt-4 font-light">Exquisite Jewelry for Every Occasion</p>
-            </div>
 
             {/* Advertisement Section */}
-            <div className="bg-purple-800 p-8 text-center">
+            <div className=" p-6 sm:p-8 text-center">
                 <div className="max-w-4xl mx-auto">
-                    <h2 className="text-4xl font-bold text-teal-300 flex items-center justify-center">
-                        🎉 <FaGem className="mx-2" /> FLAT 10% OFF ON ALL ITEMS! 🎉
-                    </h2>
-                    <p className="text-xl text-teal-200 mt-4">Limited time offer. Shop now! ⏰</p>
+                    <p className="text-base sm:text-xl text-teal-200 mt-2 sm:mt-4">
+                        FLAT 10% OFF ON ALL ITEMS! 🎉
+                    </p>
+                    <h1 className="text-lg sm:text-2xl font-bold text-white mt-2">
+                    🎉 Limited time offer. Shop now! ⏰
+                    </h1>
                 </div>
             </div>
-            
+
             {/* Category Filter */}
-            <div className="flex justify-center my-6">
-                <button onClick={() => setCategory("All")} className={`px-6 py-2 mx-2 rounded-full text-lg transition duration-300 ${category === "All" ? "bg-teal-500 text-white shadow-lg" : "bg-gray-800 text-teal-400 hover:bg-teal-600"}`}>
-                    All
-                </button>
-                <button onClick={() => setCategory("Men")} className={`px-6 py-2 mx-2 rounded-full text-lg transition duration-300 ${category === "Men" ? "bg-teal-500 text-white shadow-lg" : "bg-gray-800 text-teal-400 hover:bg-teal-600"}`}>
-                    Men
-                </button>
-                <button onClick={() => setCategory("Women")} className={`px-6 py-2 mx-2 rounded-full text-lg transition duration-300 ${category === "Women" ? "bg-teal-500 text-white shadow-lg" : "bg-gray-800 text-teal-400 hover:bg-teal-600"}`}>
-                    Women
-                </button>
+            <div className="flex justify-center my-4 sm:my-6 flex-wrap gap-2">
+                {['All', 'Men', 'Women'].map((cat) => (
+                    <button
+                        key={cat}
+                        onClick={() => setCategory(cat)}
+                        aria-label={`Filter by ${cat}`}
+                        className={`px-4 sm:px-6 py-1 sm:py-2 rounded-full text-sm sm:text-lg font-medium transition duration-300 
+                        ${category === cat 
+                            ? "bg-teal-500 text-white shadow-lg" 
+                            : "bg-gray-800 text-teal-400 hover:bg-teal-600 hover:text-white"}`}
+                    >
+                        {cat}
+                    </button>
+                ))}
             </div>
 
             {/* Products Grid */}
-            <div className="container mx-auto p-8">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            <div className="container mx-auto p-4 sm:p-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-8">
                     {discountedProducts.map(item => (
                         <ProductCard key={item.id} item={item} />
                     ))}
                 </div>
             </div>
+
             <Footer />
         </div>
     );
 };
 
-
 export default Home;
-

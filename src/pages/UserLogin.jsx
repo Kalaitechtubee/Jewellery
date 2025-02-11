@@ -195,7 +195,7 @@ const UserLogin = () => {
 
   if (isLoggedIn) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-purple-500 to-pink-500">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-600 to-purple-700">
         <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md text-center">
           <h2 className="text-3xl font-bold mb-4">🎉 Welcome, {currentUser.name}!</h2>
           <p className="text-gray-700"><FaUser className="inline-block mr-2" /> {currentUser.username}</p>

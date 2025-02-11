@@ -147,29 +147,29 @@ const Cart = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-r from-gray-900 to-gray-700 flex flex-col items-center p-6 font-mono">
-            <h1 className="text-4xl font-bold text-yellow-300 mb-6 flex items-center">
+        <div className="min-h-screen bg-gradient-to-r from-gray-900 to-gray-700 flex flex-col items-center p-4 sm:p-6 font-mono">
+            <h1 className="text-3xl sm:text-4xl font-bold text-yellow-300 mb-4 flex items-center">
                 <FaShoppingCart className="mr-2" /> Your Cart
             </h1>
 
             {cartItems.length === 0 ? (
                 <p className="text-gray-300 text-lg font-medium">🛒 Your cart is empty.</p>
             ) : (
-                <div className="max-w-3xl w-full bg-gray-800 p-6 rounded-lg shadow-xl">
+                <div className="w-full max-w-4xl bg-gray-800 p-4 sm:p-6 rounded-lg shadow-xl">
                     <div className="space-y-4">
                         {cartItems.map((item) => (
-                            <div key={item.id} className="bg-gray-700 p-4 rounded-lg shadow-md flex justify-between items-center">
-                                <div className="flex items-center space-x-4">
-                                    <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded-lg border border-gray-500" />
+                            <div key={item.id} className="bg-gray-700 p-3 sm:p-4 rounded-lg shadow-md flex flex-col sm:flex-row justify-between items-center">
+                                <div className="flex items-center space-x-4 w-full sm:w-auto">
+                                    <img src={item.image} alt={item.name} className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg border border-gray-500" />
                                     <div>
                                         <h2 className="text-lg font-semibold text-yellow-300">{item.name}</h2>
-                                        <p className="text-gray-300">Material: {item.material}</p>
-                                        <p className="text-gray-300">Category: {item.category} - {item.subcategory}</p>
-                                        <p className="text-gray-300">Price: ₹{item.price_inr}</p>
+                                        <p className="text-gray-300 text-sm sm:text-base">Material: {item.material}</p>
+                                        <p className="text-gray-300 text-sm sm:text-base">Category: {item.category} - {item.subcategory}</p>
+                                        <p className="text-gray-300 text-sm sm:text-base">Price: ₹{item.price_inr}</p>
                                         <p className="text-lg font-bold text-yellow-300">Total: ₹{item.price_inr * item.quantity}</p>
                                     </div>
                                 </div>
-                                <div className="flex items-center space-x-2">
+                                <div className="flex items-center space-x-2 mt-2 sm:mt-0">
                                     <button onClick={() => decreaseQuantity(item.id)} className="bg-red-600 text-white p-2 rounded-full hover:bg-red-700">
                                         <FaMinus />
                                     </button>
@@ -178,7 +178,7 @@ const Cart = () => {
                                         <FaPlus />
                                     </button>
                                 </div>
-                                <button onClick={() => removeItem(item.id)} className="text-red-500 hover:text-red-700">
+                                <button onClick={() => removeItem(item.id)} className="text-red-500 hover:text-red-700 mt-2 sm:mt-0">
                                     <FaTrash />
                                 </button>
                             </div>

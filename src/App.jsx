@@ -7,6 +7,9 @@ import UserLogin from './pages/UserLogin';
 import ProductDetails from './pages/ProductDetails';
 import Cart from './pages/Cart';
 import Payment from './pages/Payment';
+import AllProducts from './pages/AllProducts';
+import MenProducts from './pages/MenProducts';
+import WomenProducts from './pages/WomenProducts';
 
 
 
@@ -18,7 +21,9 @@ const App = () => {
                 <Route path="/" element={<Home />} /> {/* Homepage */}
                 <Route path="/cart" element={<Cart />} /> {/* Cart page */}
                 <Route path="/payment" element={<Payment />} /> {/* Payment page */}
-              
+                <Route path="/all-products" element={<AllProducts />} />
+                <Route path="/men-products" element={<MenProducts />} />
+                <Route path="/women-products" element={<WomenProducts />} />
 
                 {/* Admin Routes */}
                 <Route path="/admin-login" element={<AdminLogin />} /> {/* Admin login */}

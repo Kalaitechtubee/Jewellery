@@ -36,7 +36,7 @@ const ProductDetails = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 p-6 flex flex-col items-center font-sans">
+        <div className="min-h-screen bg-gradient-to-r from-blue-600 to-purple-700 p-6 flex flex-col items-center font-sans">
             <div className="w-full max-w-5xl bg-white p-8 rounded-xl shadow-lg">
                 <h1 className="text-4xl font-bold text-gray-900 text-center mb-6">{product.name}</h1>
                 <div className="flex flex-col md:flex-row items-center gap-8">
