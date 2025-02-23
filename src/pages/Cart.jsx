@@ -1,210 +1,196 @@
-// import React, { useState, useEffect } from "react";
-// import { FaPlus, FaMinus, FaTrash, FaShoppingCart } from "react-icons/fa";
-// import { useNavigate } from "react-router-dom";
 
-// const Cart = () => {
-//     const [cartItems, setCartItems] = useState([]);
-//     const navigate = useNavigate();
 
-//     useEffect(() => {
-//         const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-//         setCartItems(storedCart);
-//     }, []);
 
-//     const updateCart = (updatedCart) => {
-//         setCartItems(updatedCart);
-//         localStorage.setItem("cart", JSON.stringify(updatedCart));
-//         const totalItems = updatedCart.reduce((total, item) => total + item.quantity, 0);
-//         localStorage.setItem("cartCount", totalItems);
-//     };
-
-//     const increaseQuantity = (id) => {
-//         const updatedCart = cartItems.map(item =>
-//             item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-//         );
-//         updateCart(updatedCart);
-//     };
-
-//     const decreaseQuantity = (id) => {
-//         const updatedCart = cartItems.map(item =>
-//             item.id === id ? { ...item, quantity: item.quantity - 1 } : item
-//         ).filter(item => item.quantity > 0);
-//         updateCart(updatedCart);
-//     };
-
-//     const removeItem = (id) => {
-//         const updatedCart = cartItems.filter(item => item.id !== id);
-//         updateCart(updatedCart);
-//     };
-
-//     const subtotal = cartItems.reduce((total, item) => total + item.price_inr * item.quantity, 0);
-
-//     const handleOrderConfirm = () => {
-//         localStorage.setItem("totalPrice", subtotal.toFixed(2));
-//         navigate("/payment");
-//     };
-
-//     return (
-//         <div className="min-h-screen bg-gradient-to-r from-gray-900 to-gray-700 flex flex-col items-center p-6 font-mono">
-//             <h1 className="text-4xl font-bold text-yellow-300 mb-6 flex items-center">
-//                 <FaShoppingCart className="mr-2" /> Your Cart
-//             </h1>
-
-//             {cartItems.length === 0 ? (
-//                 <p className="text-gray-300 text-lg font-medium">🛒 Your cart is empty.</p>
-//             ) : (
-//                 <div className="max-w-3xl w-full bg-gray-800 p-6 rounded-lg shadow-xl">
-//                     <div className="space-y-4">
-//                         {cartItems.map((item) => (
-//                             <div key={item.id} className="bg-gray-700 p-4 rounded-lg shadow-md flex justify-between items-center">
-//                                 <div className="flex items-center space-x-4">
-//                                     <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded-lg border border-gray-500" />
-//                                     <div>
-//                                         <h2 className="text-lg font-semibold text-yellow-300">{item.name}</h2>
-//                                         <p className="text-gray-300">Material: {item.material}</p>
-//                                         <p className="text-gray-300">Category: {item.category} - {item.subcategory}</p>
-//                                         <p className="text-gray-300">Price: ₹{item.price_inr}</p>
-//                                         <p className="text-lg font-bold text-yellow-300">Total: ₹{item.price_inr * item.quantity}</p>
-//                                     </div>
-//                                 </div>
-//                                 <div className="flex items-center space-x-2">
-//                                     <button onClick={() => decreaseQuantity(item.id)} className="bg-red-600 text-white p-2 rounded-full hover:bg-red-700">
-//                                         <FaMinus />
-//                                     </button>
-//                                     <span className="text-lg font-semibold text-yellow-300">{item.quantity}</span>
-//                                     <button onClick={() => increaseQuantity(item.id)} className="bg-green-600 text-white p-2 rounded-full hover:bg-green-700">
-//                                         <FaPlus />
-//                                     </button>
-//                                 </div>
-//                                 <button onClick={() => removeItem(item.id)} className="text-red-500 hover:text-red-700">
-//                                     <FaTrash />
-//                                 </button>
-//                             </div>
-//                         ))}
-//                     </div>
-//                     <div className="sticky bottom-0 bg-gray-900 p-4 mt-6 rounded-lg shadow-lg">
-//                         <div className="flex justify-between items-center text-lg font-semibold text-yellow-300">
-//                             <span>Subtotal:</span>
-//                             <span>₹{subtotal.toFixed(2)}</span>
-//                         </div>
-//                         <button onClick={handleOrderConfirm} className="mt-4 bg-yellow-500 text-black p-3 rounded-lg w-full text-lg font-semibold hover:bg-yellow-600">
-//                             Confirm Order & Pay
-//                         </button>
-//                     </div>
-//                 </div>
-//             )}
-//         </div>
-//     );
-// };
-
-// export default Cart;
 import React, { useState, useEffect } from "react";
-import { FaPlus, FaMinus, FaTrash, FaShoppingCart } from "react-icons/fa";
+import { FaBars, FaPlus, FaMinus, FaTrash, FaShoppingCart, FaHome, FaUser, FaBox, FaCog, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
-    const [cartItems, setCartItems] = useState([]);
-    const navigate = useNavigate();
+  const [cartItems, setCartItems] = useState([]);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-        setCartItems(storedCart);
-    }, []);
+  useEffect(() => {
+    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+    setCartItems(storedCart);
+  }, []);
 
-    const updateCart = (updatedCart) => {
-        setCartItems(updatedCart);
-        localStorage.setItem("cart", JSON.stringify(updatedCart));
-        const totalItems = updatedCart.reduce((total, item) => total + item.quantity, 0);
-        localStorage.setItem("cartCount", totalItems);
-    };
+  const updateCart = (updatedCart) => {
+    setCartItems(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    const totalItems = updatedCart.reduce((total, item) => total + item.quantity, 0);
+    localStorage.setItem("cartCount", totalItems);
+  };
 
-    const increaseQuantity = (id) => {
-        const updatedCart = cartItems.map(item =>
-            item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-        updateCart(updatedCart);
-    };
+  const increaseQuantity = (id) => {
+    const updatedCart = cartItems.map((item) =>
+      item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+    );
+    updateCart(updatedCart);
+  };
 
-    const decreaseQuantity = (id) => {
-        const updatedCart = cartItems.map(item =>
-            item.id === id ? { ...item, quantity: item.quantity - 1 } : item
-        ).filter(item => item.quantity > 0);
-        updateCart(updatedCart);
-    };
+  const decreaseQuantity = (id) => {
+    const updatedCart = cartItems
+      .map((item) =>
+        item.id === id ? { ...item, quantity: item.quantity - 1 } : item
+      )
+      .filter((item) => item.quantity > 0);
+    updateCart(updatedCart);
+  };
 
-    const removeItem = (id) => {
-        const updatedCart = cartItems.filter(item => item.id !== id);
-        updateCart(updatedCart);
-    };
+  const removeItem = (id) => {
+    const updatedCart = cartItems.filter((item) => item.id !== id);
+    updateCart(updatedCart);
+  };
 
-    const subtotal = cartItems.reduce((total, item) => total + item.price_inr * item.quantity, 0);
-    const discount = subtotal * 0.10;
-    const finalTotal = subtotal - discount;
+  const subtotal = cartItems.reduce(
+    (total, item) => total + item.price_inr * item.quantity,
+    0
+  );
+  const discount = subtotal * 0.1;
+  const finalTotal = subtotal - discount;
 
-    const handleOrderConfirm = () => {
-        localStorage.setItem("totalPrice", finalTotal.toFixed(2));
-        navigate("/payment");
-    };
+  const handleOrderConfirm = () => {
+    localStorage.setItem("totalPrice", finalTotal.toFixed(2));
+    navigate("/payment");
+  };
 
-    return (
-        <div className="min-h-screen bg-gradient-to-r from-gray-900 to-gray-700 flex flex-col items-center p-4 sm:p-6 font-mono">
-            <h1 className="text-3xl sm:text-4xl font-bold text-yellow-300 mb-4 flex items-center">
-                <FaShoppingCart className="mr-2" /> Your Cart
-            </h1>
+  return (
+    <div className="min-h-screen bg-gray-50 flex">
+      {/* Sidebar */}
+      <div
+        className={`w-64 bg-white shadow-lg fixed h-full flex flex-col justify-between transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-64"
+        } transition-transform md:translate-x-0`}
+      >
+        <div>
+          <div className="p-6 border-b flex justify-between items-center">
+            <h2 className="text-xl font-bold text-gray-900">My Store</h2>
+            <button className="md:hidden" onClick={() => setIsSidebarOpen(false)}>
+              ✖
+            </button>
+          </div>
+          <nav className="mt-6">
+            <a href="/" className="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
+              <FaHome className="mr-3" /> Home
+            </a>
+            <a href="/user-login" className="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
+              <FaUser className="mr-3" /> Profile
+            </a>
+            <a href="/cart" className="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
+              <FaBox className="mr-3" /> Orders
+            </a>
+            <a href="/cart" className="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
+              <FaCog className="mr-3" /> Settings
+            </a>
+          </nav>
+        </div>
+        <div className="p-6 border-t">
+          <a href="/user-login" className="flex items-center text-gray-700 hover:text-red-600">
+            <FaSignOutAlt className="mr-3" /> Logout
+          </a>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 md:ml-64">
+        <div className="py-8 px-4">
+          <button className="md:hidden p-4" onClick={() => setIsSidebarOpen(true)}>
+            <FaBars />
+          </button>
+
+          <div className="max-w-6xl mx-auto">
+            <div className="flex items-center justify-between mb-8">
+              <h1 className="text-3xl font-bold text-gray-900 flex items-center">
+                <FaShoppingCart className="mr-3 text-teal-600" /> Shopping Cart
+              </h1>
+              <span className="text-sm text-gray-600">
+                {cartItems.length} {cartItems.length === 1 ? "item" : "items"}
+              </span>
+            </div>
 
             {cartItems.length === 0 ? (
-                <p className="text-gray-300 text-lg font-medium">🛒 Your cart is empty.</p>
+              <div className="text-center py-16 bg-white rounded-lg shadow-sm">
+                <FaShoppingCart className="mx-auto text-5xl text-gray-400 mb-4" />
+                <p className="text-xl text-gray-600">Your cart is empty</p>
+                <button
+                  onClick={() => navigate("/")}
+                  className="mt-4 px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
+                >
+                  Continue Shopping
+                </button>
+              </div>
             ) : (
-                <div className="w-full max-w-4xl bg-gray-800 p-4 sm:p-6 rounded-lg shadow-xl">
-                    <div className="space-y-4">
-                        {cartItems.map((item) => (
-                            <div key={item.id} className="bg-gray-700 p-3 sm:p-4 rounded-lg shadow-md flex flex-col sm:flex-row justify-between items-center">
-                                <div className="flex items-center space-x-4 w-full sm:w-auto">
-                                    <img src={item.image} alt={item.name} className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg border border-gray-500" />
-                                    <div>
-                                        <h2 className="text-lg font-semibold text-yellow-300">{item.name}</h2>
-                                        <p className="text-gray-300 text-sm sm:text-base">Material: {item.material}</p>
-                                        <p className="text-gray-300 text-sm sm:text-base">Category: {item.category} - {item.subcategory}</p>
-                                        <p className="text-gray-300 text-sm sm:text-base">Price: ₹{item.price_inr}</p>
-                                        <p className="text-lg font-bold text-yellow-300">Total: ₹{item.price_inr * item.quantity}</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center space-x-2 mt-2 sm:mt-0">
-                                    <button onClick={() => decreaseQuantity(item.id)} className="bg-red-600 text-white p-2 rounded-full hover:bg-red-700">
-                                        <FaMinus />
-                                    </button>
-                                    <span className="text-lg font-semibold text-yellow-300">{item.quantity}</span>
-                                    <button onClick={() => increaseQuantity(item.id)} className="bg-green-600 text-white p-2 rounded-full hover:bg-green-700">
-                                        <FaPlus />
-                                    </button>
-                                </div>
-                                <button onClick={() => removeItem(item.id)} className="text-red-500 hover:text-red-700 mt-2 sm:mt-0">
-                                    <FaTrash />
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="sticky bottom-0 bg-gray-900 p-4 mt-6 rounded-lg shadow-lg">
-                        <div className="flex justify-between items-center text-lg font-semibold text-yellow-300">
-                            <span>Subtotal:</span>
-                            <span>₹{subtotal.toFixed(2)}</span>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2 space-y-4">
+                  {cartItems.map((item) => (
+                    <div key={item.id} className="bg-white rounded-xl shadow-sm p-4 flex items-center justify-between hover:shadow-md transition-shadow">
+                      <div className="flex items-center space-x-4">
+                        <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded-lg" />
+                        <div>
+                          <h2 className="text-lg font-semibold text-gray-900">{item.name}</h2>
+                          <p className="text-sm text-gray-600">{item.material} | {item.category} - {item.subcategory}</p>
+                          <p className="text-lg font-medium text-teal-600">₹{(item.price_inr * item.quantity).toFixed(2)}</p>
                         </div>
-                        <div className="flex justify-between items-center text-lg font-semibold text-red-400">
-                            <span>Discount (10% off):</span>
-                            <span>- ₹{discount.toFixed(2)}</span>
-                        </div>
-                        <div className="flex justify-between items-center text-lg font-semibold text-yellow-300 mt-2">
-                            <span>Final Total:</span>
-                            <span>₹{finalTotal.toFixed(2)}</span>
-                        </div>
-                        <button onClick={handleOrderConfirm} className="mt-4 bg-yellow-500 text-black p-3 rounded-lg w-full text-lg font-semibold hover:bg-yellow-600">
-                            Confirm Order & Pay
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <button
+                          onClick={() => decreaseQuantity(item.id)}
+                          className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200"
+                        >
+                          <FaMinus />
                         </button>
+                        <span className="text-lg font-medium">{item.quantity}</span>
+                        <button
+                          onClick={() => increaseQuantity(item.id)}
+                          className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200"
+                        >
+                          <FaPlus />
+                        </button>
+                        <button
+                          onClick={() => removeItem(item.id)}
+                          className="p-2 bg-red-100 rounded-lg hover:bg-red-200 text-red-600"
+                        >
+                          <FaTrash />
+                        </button>
+                      </div>
                     </div>
+                  ))}
                 </div>
+
+                {/* Order Summary */}
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-6">Order Summary</h2>
+                  <div className="space-y-4">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Subtotal</span>
+                      <span className="font-medium">₹{subtotal.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Discount (10%)</span>
+                      <span className="font-medium">-₹{discount.toFixed(2)}</span>
+                    </div>
+                    <div className="border-t pt-4">
+                      <div className="flex justify-between">
+                        <span className="text-lg font-bold text-gray-900">Total</span>
+                        <span className="text-lg font-bold text-teal-600">₹{finalTotal.toFixed(2)}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleOrderConfirm}
+                    className="mt-6 w-full px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
+                  >
+                    Confirm Order
+                  </button>
+                </div>
+              </div>
             )}
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default Cart;

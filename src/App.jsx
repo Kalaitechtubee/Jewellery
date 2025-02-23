@@ -10,6 +10,8 @@ import Payment from './pages/Payment';
 import AllProducts from './pages/AllProducts';
 import MenProducts from './pages/MenProducts';
 import WomenProducts from './pages/WomenProducts';
+import HandmadeProducts from "./pages/HandmadeProducts";  // Adjust path if needed
+
 
 
 
@@ -24,6 +26,7 @@ const App = () => {
                 <Route path="/all-products" element={<AllProducts />} />
                 <Route path="/men-products" element={<MenProducts />} />
                 <Route path="/women-products" element={<WomenProducts />} />
+                <Route path="/handmade-products" element={<HandmadeProducts/>} />
 
                 {/* Admin Routes */}
                 <Route path="/admin-login" element={<AdminLogin />} /> {/* Admin login */}

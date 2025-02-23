@@ -1,3 +1,24 @@
+import handmadeProducts1 from "../assets/images/handmadeProducts1.jpg";
+import handmadeProducts2 from "../assets/images/handmadeProducts2.webp";
+import handmadeProducts3 from "../assets/images/handmadeProducts3.webp";
+import handmadeProducts4 from "../assets/images/handmadeProducts4.jpg";
+import handmadeProducts5 from "../assets/images/handmadeProducts5.jpg";
+import handmadeProducts6 from "../assets/images/handmadeProducts6.jpg";
+import handmadeProducts7 from "../assets/images/handmadeProducts7.jpg";
+import handmadeProducts8 from "../assets/images/handmadeProducts8.jpg";
+import handmadeProducts9 from "../assets/images/handmadeProducts9.jpg";
+import handmadeProducts10 from "../assets/images/handmadeProducts10.jpg";
+import handmadeProducts11 from "../assets/images/handmadeProducts11.jpg";
+import handmadeProducts12 from "../assets/images/handmadeProducts12.avif";
+import handmadeProducts13 from "../assets/images/handmadeProducts13.jpg";
+import handmadeProducts14 from "../assets/images/handmadeProducts14.jpg";
+import handmadeProducts15 from "../assets/images/handmadeProducts15.jpg";
+import handmadeProducts16 from "../assets/images/handmadeProducts16.jpg";
+import handmadeProducts17 from "../assets/images/handmadeProducts17.jpg";
+import handmadeProducts18 from "../assets/images/handmadeProducts18.webp";
+
+
+
 const products = [
   {
     "id": 1,
@@ -549,6 +570,206 @@ const products = [
         "image": "https://github.com/Success1308/jewellery-shop-api/raw/main/public/images/5000.jpeg",
         "details": "A stunning silver chain that enhances your style."
       },
+
+          {
+      id: 51,
+      name: "Handmade Resin Earrings",
+      category: "Handmade",
+      subcategory: "Earrings",
+      material: "Resin & Dried Flowers",
+      price_usd: 18.0,
+      price_inr: 1395.90,
+      image: handmadeProducts1,
+      details: "Beautiful handmade resin earrings with dried flowers for a unique touch."
+    },
+    {
+      id: 52,
+      name: "Personalized Name Bracelet",
+      category: "Handmade",
+      subcategory: "Bracelet",
+      material: "Stainless Steel",
+      price_usd: 22.0,
+      price_inr: 1706.10,
+      image: handmadeProducts2,
+      details: "Custom name bracelet crafted from durable stainless steel."
+    },
+    {
+      id: 53,
+      name: "Hand-Knitted Wool Scarf",
+      category: "Handmade",
+      subcategory: "Scarves",
+      material: "Wool",
+      price_usd: 30.0,
+      price_inr: 2326.50,
+      image: handmadeProducts3,
+      details: "A warm and cozy hand-knitted woolen scarf for winter fashion."
+    },
+    {
+      id: 54,
+      name: "Handmade Leather Wallet",
+      category: "Handmade",
+      subcategory: "Wallets",
+      material: "Genuine Leather",
+      price_usd: 35.0,
+      price_inr: 2714.25,
+      image: handmadeProducts4,
+      details: "Premium quality handmade leather wallet with multiple compartments."
+    },
+    {
+      id: 55,
+      name: "Handwoven Jute Tote Bag",
+      category: "Handmade",
+      subcategory: "Bags",
+      material: "Jute",
+      price_usd: 25.0,
+      price_inr: 1938.75,
+      image: handmadeProducts5,
+      details: "Eco-friendly and stylish handwoven jute tote bag."
+    },
+    {
+      id: 56,
+      name: "Hand-Painted Ceramic Mug",
+      category: "Handmade",
+      subcategory: "Mugs",
+      material: "Ceramic",
+      price_usd: 15.0,
+      price_inr: 1163.25,
+      image: handmadeProducts6,
+      details: "Aesthetic hand-painted ceramic mug for coffee lovers."
+    },
+    {
+      id: 57,
+      name: "Handmade Wooden Keychain",
+      category: "Handmade",
+      subcategory: "Keychains",
+      material: "Wood",
+      price_usd: 10.0,
+      price_inr: 775.50,
+      image: handmadeProducts7,
+      details: "Personalized handmade wooden keychain with engraving options."
+    },
+    {
+      id: 58,
+      name: "Handcrafted Dreamcatcher",
+      category: "Handmade",
+      subcategory: "Wall Hangings",
+      material: "Feathers & Cotton Thread",
+      price_usd: 28.0,
+      price_inr: 2171.40,
+      image: handmadeProducts8,
+      details: "A handmade dreamcatcher for positive energy and decoration."
+    },
+    {
+      id: 59,
+      name: "Handmade Macrame Wall Hanging",
+      category: "Handmade",
+      subcategory: "Wall Art",
+      material: "Cotton Rope",
+      price_usd: 40.0,
+      price_inr: 3102.00,
+      image:handmadeProducts9,
+      details: "Handwoven macrame wall hanging to add a boho touch to your space."
+    },
+    {
+      id: 60,
+      name: "Handmade Scented Candles",
+      category: "Handmade",
+      subcategory: "Candles",
+      material: "Soy Wax",
+      price_usd: 18.0,
+      price_inr: 1395.90,
+      image:handmadeProducts10,
+      details: "Aromatic handmade candles with calming scents."
+    },
+    {
+      id: 61,
+      name: "Handmade Resin Coasters",
+      category: "Handmade",
+      subcategory: "Coasters",
+      material: "Resin",
+      price_usd: 20.0,
+      price_inr: 1551.00,
+      image: handmadeProducts11,
+      details: "Stylish resin coasters with unique designs."
+    },
+    {
+      id: 62,
+      name: "Handcrafted Wooden Jewelry Box",
+      category: "Handmade",
+      subcategory: "Storage",
+      material: "Wood",
+      price_usd: 35.0,
+      price_inr: 2714.25,
+      image: handmadeProducts12,
+      details: "A handcrafted wooden jewelry box with intricate carvings."
+    },
+    {
+      id: 63,
+      name: "Handmade Fabric Headbands",
+      category: "Handmade",
+      subcategory: "Hair Accessories",
+      material: "Cotton Fabric",
+      price_usd: 12.0,
+      price_inr: 930.60,
+      image: handmadeProducts13,
+      details: "Soft and stylish handmade fabric headbands."
+    },
+    {
+      id: 64,
+      name: "Handcrafted Beaded Anklet",
+      category: "Handmade",
+      subcategory: "Anklets",
+      material: "Beads & String",
+      price_usd: 14.0,
+      price_inr: 1085.70,
+      image:handmadeProducts14,
+      details: "A delicate handmade beaded anklet with vibrant colors."
+    },
+    {
+      id: 65,
+      name: "Handmade Crochet Teddy Bear",
+      category: "Handmade",
+      subcategory: "Stuffed Toys",
+      material: "Cotton Yarn",
+      price_usd: 30.0,
+      price_inr: 2326.50,
+      image: handmadeProducts15,
+      details: "Adorable handmade crochet teddy bear."
+    },
+    {
+      id: 66,
+      name: "Handmade Soap Set",
+      category: "Handmade",
+      subcategory: "Bath & Spa",
+      material: "Essential Oils & Glycerin",
+      price_usd: 18.0,
+      price_inr: 1395.90,
+      image: handmadeProducts16,
+      details: "A set of handmade organic soaps with refreshing scents."
+    },
+    {
+      id: 67,
+      name: "Hand-Painted Canvas Art",
+      category: "Handmade",
+      subcategory: "Art",
+      material: "Canvas & Acrylic Paint",
+      price_usd: 45.0,
+      price_inr: 3489.75,
+      image: handmadeProducts17,
+      details: "Unique hand-painted canvas art to elevate your space."
+    },
+    {
+      id: 68,
+      name: "Handmade Beaded Clutch",
+      category: "Handmade",
+      subcategory: "Bags",
+      material: "Beads & Fabric",
+      price_usd: 50.0,
+      price_inr: 3877.50,
+      image:handmadeProducts18,
+      details: "A stunning handmade beaded clutch for special occasions."
+    }
+      
     ]
   
   export default products;

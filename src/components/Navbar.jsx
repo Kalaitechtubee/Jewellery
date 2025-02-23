@@ -1,215 +1,222 @@
-
-
-
-
-
-// import React, { useState, useEffect } from 'react';
-// import { Link, useNavigate } from 'react-router-dom';
-// import { FaSignInAlt, FaUserShield, FaShoppingBag, FaBars, FaTimes, FaGem, FaCrown } from 'react-icons/fa';
-
-// const Navbar = () => {
-//     const [isMenuOpen, setIsMenuOpen] = useState(false);
-//     const [cartItems, setCartItems] = useState(0);
-//     const navigate = useNavigate();
-
-//     useEffect(() => {
-//         const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-//         const totalItems = storedCart.reduce((total, item) => total + item.quantity, 0);
-//         setCartItems(totalItems);
-//     }, []);
-
-//     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-
-//     return (
-//         <nav className="fixed w-full top-0 z-50 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 shadow-lg backdrop-blur-md bg-opacity-90">
-//             <div className="container mx-auto flex justify-between items-center p-4">
-//                 {/* Logo */}
-//                 <Link to="/" className="text-white text-2xl md:text-3xl font-extrabold tracking-wide flex items-center">
-//                     <FaGem className="mr-2 text-yellow-300" /> JJ's Jewellery
-//                 </Link>
-
-//                 {/* Desktop Menu */}
-//                 <div className="hidden lg:flex space-x-6 items-center">
-//                     {/* Admin Button */}
-//                     <Link to="/admin-login" className="bg-blue-600 hover:bg-blue-700 text-white flex items-center px-5 py-2 rounded-full transition">
-//                         <FaUserShield className="mr-2" /> Admin
-//                     </Link>
-
-//                     {/* Login Button */}
-//                     <Link to="/user-login" className="bg-green-500 hover:bg-green-600 text-white flex items-center px-5 py-2 rounded-full transition">
-//                         <FaSignInAlt className="mr-2" /> Login
-//                     </Link>
-
-//                     {/* Cart Button */}
-//                     <Link to="/cart" className="relative flex items-center">
-//                         <button className="bg-white text-black flex items-center px-5 py-2 rounded-full shadow-md hover:bg-gray-100 transition">
-//                             <FaShoppingBag className="mr-2" size={22} />
-//                             Cart
-//                         </button>
-//                         {cartItems > 0 && (
-//                             <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full px-2">
-//                                 {cartItems}
-//                             </span>
-//                         )}
-//                     </Link>
-//                 </div>
-
-//                 {/* Mobile Menu Icon */}
-//                 <div className="lg:hidden">
-//                     <button onClick={toggleMenu} className="text-white focus:outline-none">
-//                         {isMenuOpen ? <FaTimes size={28} /> : <FaBars size={28} />}
-//                     </button>
-//                 </div>
-//             </div>
-
-//             {/* Mobile Menu */}
-//             {isMenuOpen && (
-//                 <div className="lg:hidden fixed inset-0 bg-black bg-opacity-90 flex flex-col items-center justify-center space-y-6 text-white transition-all">
-//                     <Link to="/" onClick={toggleMenu} className="text-2xl font-bold hover:text-gray-300 transition flex items-center">
-//                         <FaCrown className="mr-2 text-yellow-300" /> Home
-//                     </Link>
-
-//                     {/* Admin Button */}
-//                     <Link to="/admin-login" className="bg-blue-600 hover:bg-blue-700 text-white flex items-center px-6 py-3 rounded-full transition">
-//                         <FaUserShield className="mr-2" /> Admin
-//                     </Link>
-
-//                     {/* Login Button */}
-//                     <Link to="/user-login" className="bg-green-500 hover:bg-green-600 text-white flex items-center px-6 py-3 rounded-full transition">
-//                         <FaSignInAlt className="mr-2" /> Login
-//                     </Link>
-
-//                     {/* Cart Button */}
-//                     <Link to="/cart" className="relative flex items-center">
-//                         <button className="bg-white text-black flex items-center px-6 py-3 rounded-full shadow-md hover:bg-gray-100 transition">
-//                             <FaShoppingBag className="mr-2" size={24} />
-//                             Cart
-//                         </button>
-//                         {cartItems > 0 && (
-//                             <span className="absolute -top-2 -right-2 bg-red-600 text-white text-sm font-bold rounded-full px-3">
-//                                 {cartItems}
-//                             </span>
-//                         )}
-//                     </Link>
-
-//                     <button onClick={toggleMenu} className="text-gray-300 text-lg mt-4">Close Menu</button>
-//                 </div>
-//             )}
-//         </nav>
-//     );
-// };
-
-// export default Navbar;
-
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { FaSignInAlt, FaUserShield, FaShoppingBag, FaBars, FaTimes, FaGem, FaChevronDown } from 'react-icons/fa';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FaSignInAlt, FaUserShield, FaShoppingBag, FaBars, FaTimes, FaGem, FaChevronDown } from "react-icons/fa";
 
 const Navbar = () => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [cartItems, setCartItems] = useState(0);
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [cartItems, setCartItems] = useState(0);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-        const totalItems = storedCart.reduce((total, item) => total + item.quantity, 0);
-        setCartItems(totalItems);
-    }, []);
+  useEffect(() => {
+    const updateCartCount = () => {
+      const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+      const totalItems = storedCart.reduce((total, item) => total + item.quantity, 0);
+      setCartItems(totalItems);
+    };
 
-    const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-    const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
+    updateCartCount();
+    window.addEventListener("storage", updateCartCount);
+    return () => window.removeEventListener("storage", updateCartCount);
+  }, []);
 
-    return (
-        <nav className="fixed w-full top-0 z-50 bg-indigo-900 shadow-md">
-            <div className="container mx-auto flex justify-between items-center p-4">
-                {/* Logo */}
-                <Link to="/" className="text-white text-2xl md:text-3xl font-extrabold flex items-center">
-                    <FaGem className="mr-2" />  Beauty Shopping
-                </Link>
+  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
+  const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+    setIsDropdownOpen(false);
+  };
 
-                {/* Desktop Menu */}
-                <div className="hidden lg:flex space-x-6 items-center">
-                    {/* Categories Dropdown */}
-                    <div className="relative">
-                        <button 
-                            className="flex items-center text-white font-medium hover:text-blue-400 transition"
-                            onClick={toggleDropdown}
-                        >
-                            Categories <FaChevronDown className="ml-1" />
-                        </button>
-                        {isDropdownOpen && (
-                            <div className="absolute left-0 mt-2 w-40 bg-white text-gray-900 rounded shadow-lg">
-                                <Link to="/all-products" className="block px-4 py-2 hover:bg-gray-200">All</Link>
-                                <Link to="/men-products" className="block px-4 py-2 hover:bg-gray-200">Men</Link>
-                                <Link to="/women-products" className="block px-4 py-2 hover:bg-gray-200">Women</Link>
-                            </div>
-                        )}
-                    </div>
+  return (
+    <nav className="fixed w-full top-0 z-50 bg-white shadow-md transition-all duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
+        {/* Logo */}
+        <Link
+          to="/"
+          className="text-2xl md:text-3xl font-bold text-gray-900 flex items-center hover:text-teal-600 transition-colors duration-200"
+          onClick={closeMenu}
+        >
+          <FaGem className="mr-2 text-teal-500" /> Beauty Shopping
+        </Link>
 
-                    {/* Other Links */}
-                    <Link to="/admin-login" className="bg-blue-400 hover:bg-blue-500 text-white flex items-center px-5 py-2 rounded-full transition">
-                        <FaUserShield className="mr-2" /> Admin
-                    </Link>
-                    <Link to="/user-login" className="bg-green-400 hover:bg-green-500 text-white flex items-center px-5 py-2 rounded-full transition">
-                        <FaSignInAlt className="mr-2" /> Login
-                    </Link>
-                    <Link to="/cart" className="relative flex items-center">
-                        <button className="bg-gray-200 text-gray-700 flex items-center px-5 py-2 rounded-full shadow-md hover:bg-gray-300 transition">
-                            <FaShoppingBag className="mr-2" size={22} /> Cart
-                        </button>
-                        {cartItems > 0 && (
-                            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full px-2">
-                                {cartItems}
-                            </span>
-                        )}
-                    </Link>
-                </div>
-
-                {/* Mobile Menu Icon */}
-                <div className="lg:hidden">
-                    <button onClick={toggleMenu} className="text-white focus:outline-none">
-                        {isMenuOpen ? <FaTimes size={28} /> : <FaBars size={28} />}
-                    </button>
-                </div>
+        {/* Desktop Menu */}
+        <div className="hidden lg:flex items-center space-x-8">
+          {/* Categories Dropdown */}
+          <div className="relative group">
+            <button
+              className="flex items-center text-gray-700 font-medium hover:text-teal-600 transition-colors duration-200"
+              onClick={toggleDropdown}
+            >
+              Categories <FaChevronDown className="ml-2 text-sm" />
+            </button>
+            <div
+              className={`absolute left-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 transform transition-all duration-300 ${
+                isDropdownOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
+              }`}
+            >
+              <Link
+                to="/all-products"
+                className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600 rounded-t-xl"
+                onClick={closeMenu}
+              >
+                All
+              </Link>
+              <Link
+                to="/men-products"
+                className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600"
+                onClick={closeMenu}
+              >
+                Men
+              </Link>
+              <Link
+                to="/women-products"
+                className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600"
+                onClick={closeMenu}
+              >
+                Women
+              </Link>
+              <Link
+                to="/handmade-products"
+                className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600 rounded-b-xl"
+                onClick={closeMenu}
+              >
+                Handmade
+              </Link>
             </div>
+          </div>
 
-            {/* Mobile Menu */}
-            {isMenuOpen && (
-                <div className="lg:hidden fixed top-0 right-0 h-full w-2/3 bg-indigo-900 flex flex-col items-start space-y-6 text-white shadow-lg p-6">
-                    <button onClick={toggleMenu} className="self-end text-white text-lg">✖</button>
-                    <Link to="/" onClick={toggleMenu} className="text-xl font-bold hover:text-blue-400 transition">
-                        Home
-                    </Link>
-                    <Link to="/all-products" onClick={toggleMenu} className="text-lg hover:text-gray-300">
-                        All Products
-                    </Link>
-                    <Link to="/men-products" onClick={toggleMenu} className="text-lg hover:text-gray-300">
-                        Men
-                    </Link>
-                    <Link to="/women-products" onClick={toggleMenu} className="text-lg hover:text-gray-300">
-                        Women
-                    </Link>
-                    <Link to="/admin-login" className="bg-blue-400 hover:bg-blue-500 text-white flex items-center px-4 py-2 rounded-full transition">
-                        <FaUserShield className="mr-2" /> Admin
-                    </Link>
-                    <Link to="/user-login" className="bg-green-400 hover:bg-green-500 text-white flex items-center px-4 py-2 rounded-full transition">
-                        <FaSignInAlt className="mr-2" /> Login
-                    </Link>
-                    <Link to="/cart" className="relative flex items-center">
-                        <button className="bg-gray-200 text-gray-700 flex items-center px-4 py-2 rounded-full shadow-md hover:bg-gray-300 transition">
-                            <FaShoppingBag className="mr-2" size={22} /> Cart
-                        </button>
-                        {cartItems > 0 && (
-                            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-sm font-bold rounded-full px-3">
-                                {cartItems}
-                            </span>
-                        )}
-                    </Link>
-                </div>
+          {/* Other Links */}
+          <Link
+            to="/admin-login"
+            className="bg-teal-600 text-white px-4 py-2 rounded-full flex items-center space-x-2 hover:bg-teal-700 transition-all duration-200 shadow-md"
+            onClick={closeMenu}
+          >
+            <FaUserShield /> <span>Admin</span>
+          </Link>
+          <Link
+            to="/user-login"
+            className="bg-teal-600 text-white px-4 py-2 rounded-full flex items-center space-x-2 hover:bg-teal-700 transition-all duration-200 shadow-md"
+            onClick={closeMenu}
+          >
+            <FaSignInAlt /> <span>Login</span>
+          </Link>
+          <Link
+            to="/cart"
+            className="relative flex items-center"
+            onClick={closeMenu}
+          >
+            <button className="bg-gray-100 text-gray-900 px-4 py-2 rounded-full flex items-center space-x-2 hover:bg-gray-200 transition-all duration-200 shadow-md">
+              <FaShoppingBag size={20} /> <span>Cart</span>
+            </button>
+            {cartItems > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-md">
+                {cartItems}
+              </span>
             )}
-        </nav>
-    );
+          </Link>
+        </div>
+
+        {/* Mobile Menu Toggle */}
+        <button
+          onClick={toggleMenu}
+          className="lg:hidden text-gray-900 focus:outline-none p-2"
+        >
+          {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      <div
+        className={`lg:hidden fixed inset-0 bg-gray-900 bg-opacity-95 transform transition-transform duration-300 ease-in-out ${
+          isMenuOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        <div className="flex flex-col h-full w-3/4 ml-auto bg-white p-6 space-y-6 text-gray-900">
+          <button
+            onClick={toggleMenu}
+            className="self-end text-gray-700 text-2xl focus:outline-none"
+          >
+            <FaTimes />
+          </button>
+          <Link
+            to="/"
+            onClick={closeMenu}
+            className="text-xl font-semibold hover:text-teal-600 transition-colors duration-200"
+          >
+            Home
+          </Link>
+          <div className="space-y-4">
+            <button
+              onClick={toggleDropdown}
+              className="flex items-center text-xl font-semibold hover:text-teal-600 transition-colors duration-200"
+            >
+              Categories <FaChevronDown className="ml-2" />
+            </button>
+            {isDropdownOpen && (
+              <div className="pl-4 space-y-2">
+                <Link
+                  to="/all-products"
+                  onClick={closeMenu}
+                  className="block text-lg hover:text-teal-600"
+                >
+                  All
+                </Link>
+                <Link
+                  to="/men-products"
+                  onClick={closeMenu}
+                  className="block text-lg hover:text-teal-600"
+                >
+                  Men
+                </Link>
+                <Link
+                  to="/women-products"
+                  onClick={closeMenu}
+                  className="block text-lg hover:text-teal-600"
+                >
+                  Women
+                </Link>
+                <Link
+                  to="/handmade-products"
+                  onClick={closeMenu}
+                  className="block text-lg hover:text-teal-600"
+                >
+                  Handmade
+                </Link>
+              </div>
+            )}
+          </div>
+          <Link
+            to="/admin-login"
+            onClick={closeMenu}
+            className="bg-teal-600 text-white px-4 py-2 rounded-full flex items-center space-x-2 hover:bg-teal-700 transition-all duration-200 shadow-md w-full justify-center"
+          >
+            <FaUserShield /> <span>Admin</span>
+          </Link>
+          <Link
+            to="/user-login"
+            onClick={closeMenu}
+            className="bg-teal-600 text-white px-4 py-2 rounded-full flex items-center space-x-2 hover:bg-teal-700 transition-all duration-200 shadow-md w-full justify-center"
+          >
+            <FaSignInAlt /> <span>Login</span>
+          </Link>
+          <Link
+            to="/cart"
+            onClick={closeMenu}
+            className="relative flex items-center justify-center"
+          >
+            <button className="bg-gray-100 text-gray-900 px-4 py-2 rounded-full flex items-center space-x-2 hover:bg-gray-200 transition-all duration-200 shadow-md w-full justify-center">
+              <FaShoppingBag size={20} /> <span>Cart</span>
+            </button>
+            {cartItems > 0 && (
+              <span className="absolute top-0 right-8 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-md">
+                {cartItems}
+              </span>
+            )}
+          </Link>
+        </div>
+      </div>
+    </nav>
+  );
 };
 
 export default Navbar;
-

@@ -12,7 +12,7 @@ const AllProducts = () => {
     }));
 
     return (
-        <div className="min-h-screen flex flex-col bg-indigo-900 text-white">
+        <div className="min-h-screen flex flex-col text-white">
             <Navbar />
             <div className="text-center py-16 bg-gradient-to-r">
                 <h1 className="text-5xl font-bold mt-10">All Products</h1>
