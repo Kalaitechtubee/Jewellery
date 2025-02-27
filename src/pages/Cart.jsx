@@ -71,22 +71,22 @@ const Cart = () => {
             </button>
           </div>
           <nav className="mt-6">
-            <a href="/" className="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
+            <a  className="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
               <FaHome className="mr-3" /> Home
             </a>
-            <a href="/user-login" className="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
+            <a  className="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
               <FaUser className="mr-3" /> Profile
             </a>
-            <a href="/cart" className="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
+            <a  className="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
               <FaBox className="mr-3" /> Orders
             </a>
-            <a href="/cart" className="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
+            <a className="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
               <FaCog className="mr-3" /> Settings
             </a>
           </nav>
         </div>
         <div className="p-6 border-t">
-          <a href="/user-login" className="flex items-center text-gray-700 hover:text-red-600">
+          <a className="flex items-center text-gray-700 hover:text-red-600">
             <FaSignOutAlt className="mr-3" /> Logout
           </a>
         </div>

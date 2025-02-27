@@ -33,7 +33,7 @@ const Navbar = () => {
         {/* Logo */}
         <Link
           to="/"
-          className="text-2xl md:text-3xl font-bold text-gray-900 flex items-center hover:text-teal-600 transition-colors duration-200"
+          className="text-xl md:text-3xl font-bold text-gray-900 flex items-center hover:text-teal-600 transition-colors duration-200"
           onClick={closeMenu}
         >
           <FaGem className="mr-2 text-teal-500" /> Beauty Shopping
@@ -55,7 +55,7 @@ const Navbar = () => {
               }`}
             >
               <Link
-                to="/all-products"
+                to="all-Product"
                 className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600 rounded-t-xl"
                 onClick={closeMenu}
               >
@@ -155,7 +155,7 @@ const Navbar = () => {
             {isDropdownOpen && (
               <div className="pl-4 space-y-2">
                 <Link
-                  to="/all-products"
+                  to="/all-Product"
                   onClick={closeMenu}
                   className="block text-lg hover:text-teal-600"
                 >
