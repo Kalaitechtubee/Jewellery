@@ -1,194 +1,133 @@
-
-
-
-import React, { useState, useEffect } from "react";
-import { FaBars, FaPlus, FaMinus, FaTrash, FaShoppingCart, FaHome, FaUser, FaBox, FaCog, FaSignOutAlt } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isConfirmed, setIsConfirmed] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCartItems(storedCart);
+    const storedItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    setCartItems(storedItems);
   }, []);
 
-  const updateCart = (updatedCart) => {
-    setCartItems(updatedCart);
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
-    const totalItems = updatedCart.reduce((total, item) => total + item.quantity, 0);
-    localStorage.setItem("cartCount", totalItems);
+  const totalAmount = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+  const handleConfirmOrder = () => {
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    localStorage.setItem('totalAmount', totalAmount.toString());
+    setIsConfirmed(true);
+    setTimeout(() => navigate('/payment'), 1500);
   };
 
-  const increaseQuantity = (id) => {
-    const updatedCart = cartItems.map((item) =>
-      item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-    );
-    updateCart(updatedCart);
-  };
-
-  const decreaseQuantity = (id) => {
-    const updatedCart = cartItems
-      .map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity - 1 } : item
-      )
-      .filter((item) => item.quantity > 0);
-    updateCart(updatedCart);
-  };
-
-  const removeItem = (id) => {
+  const handleDeleteItem = (id) => {
     const updatedCart = cartItems.filter((item) => item.id !== id);
-    updateCart(updatedCart);
+    setCartItems(updatedCart);
+    localStorage.setItem('cartItems', JSON.stringify(updatedCart));
   };
 
-  const subtotal = cartItems.reduce(
-    (total, item) => total + item.price_inr * item.quantity,
-    0
-  );
-  const discount = subtotal * 0.1;
-  const finalTotal = subtotal - discount;
-
-  const handleOrderConfirm = () => {
-    localStorage.setItem("totalPrice", finalTotal.toFixed(2));
-    navigate("/payment");
+  const handleAddToCart = (item) => {
+    const updatedCart = cartItems.map((cartItem) =>
+      cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
+    );
+    setCartItems(updatedCart);
+    localStorage.setItem('cartItems', JSON.stringify(updatedCart));
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      {/* Sidebar */}
-      <div
-        className={`w-64 bg-white shadow-lg fixed h-full flex flex-col justify-between transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-64"
-        } transition-transform md:translate-x-0`}
-      >
-        <div>
-          <div className="p-6 border-b flex justify-between items-center">
-            <h2 className="text-xl font-bold text-gray-900">My Store</h2>
-            <button className="md:hidden" onClick={() => setIsSidebarOpen(false)}>
-              ✖
-            </button>
-          </div>
-          <nav className="mt-6">
-            <a  className="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
-              <FaHome className="mr-3" /> Home
-            </a>
-            <a  className="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
-              <FaUser className="mr-3" /> Profile
-            </a>
-            <a  className="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
-              <FaBox className="mr-3" /> Orders
-            </a>
-            <a className="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
-              <FaCog className="mr-3" /> Settings
-            </a>
-          </nav>
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-gradient-to-br from-[#F9FAFB] to-[#E5E7EB] min-h-screen">
+      <h1 className="text-4xl md:text-5xl font-bold text-[#4B5EAA] mb-10 text-center animate-fade-in-down tracking-tight">
+        Your Pet Cart 🐾
+      </h1>
+
+      {cartItems.length === 0 ? (
+        <div className="text-center animate-fade-in">
+          <p className="text-lg text-gray-500">Your cart is empty.</p>
+          <Link
+            to="/all-pets"
+            className="mt-4 inline-block text-[#4B5EAA] hover:text-[#3B4A8C] font-semibold transition-colors duration-300"
+          >
+            Start Shopping Now
+          </Link>
         </div>
-        <div className="p-6 border-t">
-          <a className="flex items-center text-gray-700 hover:text-red-600">
-            <FaSignOutAlt className="mr-3" /> Logout
-          </a>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 md:ml-64">
-        <div className="py-8 px-4">
-          <button className="md:hidden p-4" onClick={() => setIsSidebarOpen(true)}>
-            <FaBars />
-          </button>
-
-          <div className="max-w-6xl mx-auto">
-            <div className="flex items-center justify-between mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 flex items-center">
-                <FaShoppingCart className="mr-3 text-teal-600" /> Shopping Cart
-              </h1>
-              <span className="text-sm text-gray-600">
-                {cartItems.length} {cartItems.length === 1 ? "item" : "items"}
-              </span>
-            </div>
-
-            {cartItems.length === 0 ? (
-              <div className="text-center py-16 bg-white rounded-lg shadow-sm">
-                <FaShoppingCart className="mx-auto text-5xl text-gray-400 mb-4" />
-                <p className="text-xl text-gray-600">Your cart is empty</p>
-                <button
-                  onClick={() => navigate("/")}
-                  className="mt-4 px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
-                >
-                  Continue Shopping
-                </button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2 space-y-4">
-                  {cartItems.map((item) => (
-                    <div key={item.id} className="bg-white rounded-xl shadow-sm p-4 flex items-center justify-between hover:shadow-md transition-shadow">
-                      <div className="flex items-center space-x-4">
-                        <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded-lg" />
-                        <div>
-                          <h2 className="text-lg font-semibold text-gray-900">{item.name}</h2>
-                          <p className="text-sm text-gray-600">{item.material} | {item.category} - {item.subcategory}</p>
-                          <p className="text-lg font-medium text-teal-600">₹{(item.price_inr * item.quantity).toFixed(2)}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-4">
-                        <button
-                          onClick={() => decreaseQuantity(item.id)}
-                          className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200"
-                        >
-                          <FaMinus />
-                        </button>
-                        <span className="text-lg font-medium">{item.quantity}</span>
-                        <button
-                          onClick={() => increaseQuantity(item.id)}
-                          className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200"
-                        >
-                          <FaPlus />
-                        </button>
-                        <button
-                          onClick={() => removeItem(item.id)}
-                          className="p-2 bg-red-100 rounded-lg hover:bg-red-200 text-red-600"
-                        >
-                          <FaTrash />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Order Summary */}
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                  <h2 className="text-xl font-bold text-gray-900 mb-6">Order Summary</h2>
-                  <div className="space-y-4">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Subtotal</span>
-                      <span className="font-medium">₹{subtotal.toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Discount (10%)</span>
-                      <span className="font-medium">-₹{discount.toFixed(2)}</span>
-                    </div>
-                    <div className="border-t pt-4">
-                      <div className="flex justify-between">
-                        <span className="text-lg font-bold text-gray-900">Total</span>
-                        <span className="text-lg font-bold text-teal-600">₹{finalTotal.toFixed(2)}</span>
-                      </div>
-                    </div>
+      ) : (
+        <div className="max-w-5xl mx-auto animate-fade-in">
+          <div className="grid gap-6">
+            {cartItems.map((item) => (
+              <div
+                key={item.id}
+                className="flex flex-col sm:flex-row items-center bg-white shadow-lg rounded-2xl p-4 hover:shadow-xl transition-all duration-300 border border-gray-100"
+              >
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-28 h-28 object-cover rounded-xl transform hover:scale-105 transition-transform duration-300"
+                />
+                <div className="flex-1 px-4 py-2 sm:py-0">
+                  <h3 className="text-xl font-semibold text-gray-800">{item.name}</h3>
+                  <p className="text-gray-500 text-sm">
+                    {item.category} | ${item.price} x {item.quantity}
+                  </p>
+                  <div className="mt-3 flex gap-3">
+                    <button
+                      onClick={() => handleAddToCart(item)}
+                      className="text-sm bg-gradient-to-r from-[#4B5EAA] to-[#7E60BF] text-white px-4 py-1 rounded-full hover:from-[#3B4A8C] hover:to-[#6A4EAA] transition-all duration-300"
+                    >
+                      Add More
+                    </button>
                   </div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <p className="text-lg font-semibold text-gray-900">
+                    ${(item.price * item.quantity).toFixed(2)}
+                  </p>
                   <button
-                    onClick={handleOrderConfirm}
-                    className="mt-6 w-full px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
+                    onClick={() => handleDeleteItem(item.id)}
+                    className="text-red-500 hover:text-red-600 transition-all duration-200 transform hover:scale-110"
+                    title="Remove Item"
                   >
-                    Confirm Order
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
                   </button>
                 </div>
               </div>
+            ))}
+          </div>
+
+          <div className="mt-8 bg-white shadow-lg rounded-2xl p-6 flex flex-col sm:flex-row justify-between items-center">
+            <span className="text-xl font-semibold text-gray-800 mb-4 sm:mb-0">Total:</span>
+            <span className="text-3xl font-bold text-[#4B5EAA]">${totalAmount.toFixed(2)}</span>
+          </div>
+
+          <div className="mt-6">
+            {isConfirmed ? (
+              <div className="text-center text-green-600 font-semibold animate-pulse">
+                Order Confirmed! Redirecting to payment...
+              </div>
+            ) : (
+              <button
+                onClick={handleConfirmOrder}
+                className="w-full bg-gradient-to-r from-[#4B5EAA] to-[#7E60BF] text-white py-3 rounded-xl hover:from-[#3B4A8C] hover:to-[#6A4EAA] transition-all duration-300 font-semibold text-lg transform hover:scale-105"
+              >
+                Confirm Order
+              </button>
             )}
           </div>
         </div>
-      </div>
+      )}
+
+      <Link
+        to="/all-pets"
+        className="mt-8 inline-block text-[#4B5EAA] hover:text-[#3B4A8C] font-semibold transition-colors duration-300 text-center w-full"
+      >
+        Continue Shopping
+      </Link>
     </div>
   );
 };

@@ -5,6 +5,13 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'playfair-display': ['"Playfair Display"', 'serif'],
+        'poppins': ['Poppins', 'sans-serif'],
+        'lora': ['Lora', 'serif'],
+        'roboto': ['Roboto', 'sans-serif'],
+        'montserrat': ['Montserrat', 'sans-serif'],
+      },
       colors: {
         teal: {
           500: "#14b8a6",

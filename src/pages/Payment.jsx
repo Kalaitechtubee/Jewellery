@@ -1,352 +1,201 @@
-// import React, { useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { FaMoneyCheckAlt, FaCheckCircle, FaArrowLeft, FaMobileAlt, FaCreditCard, FaUniversity, FaMoneyBillWave } from "react-icons/fa";
-// import QRCode from "../assets/images/qr-code.png";
-
-// const Payment = () => {
-//     const navigate = useNavigate();
-//     const [cartItems, setCartItems] = useState([]);
-//     const [totalAmount, setTotalAmount] = useState(0);
-//     const [paymentMethod, setPaymentMethod] = useState("");
-//     const [debitCardDetails, setDebitCardDetails] = useState({ cardNumber: "", expiryDate: "", cvv: "" });
-//     const [netBankingDetails, setNetBankingDetails] = useState({ bankName: "", accountNumber: "" });
-//     const [userDetails, setUserDetails] = useState({ name: "", address: "", phone: "" });
-//     const bankOptions = ["HDFC Bank", "ICICI Bank", "State Bank of India", "Axis Bank", "Kotak Mahindra Bank"];
-
-//     useEffect(() => {
-//         const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-//         setCartItems(storedCart);
-//         const storedTotal = parseFloat(localStorage.getItem("totalPrice")) || 0;
-//         setTotalAmount(storedTotal);
-//     }, []);
-
-//     const handleConfirmPayment = () => {
-//         if (!paymentMethod) {
-//             alert("Please select a payment method.");
-//             return;
-//         }
-
-//         if (paymentMethod === "cod" && (!userDetails.name || !userDetails.address || !userDetails.phone)) {
-//             alert("Please fill in all user details for cash on delivery.");
-//             return;
-//         }
-
-//         const storedOrders = JSON.parse(localStorage.getItem("orders")) || [];
-//         const newOrder = {
-//             id: Date.now(),
-//             items: cartItems,
-//             totalAmount: totalAmount,
-//             status: "Paid",
-//             paymentMethod: paymentMethod === "cod" ? "Cash on Delivery" : paymentMethod.toUpperCase(),
-//             userDetails: paymentMethod === "cod" ? userDetails : null,
-//         };
-
-//         localStorage.setItem("orders", JSON.stringify([...storedOrders, newOrder]));
-//         localStorage.removeItem("cart");
-//         localStorage.removeItem("totalPrice");
-
-//         alert(`Order Confirmed! Total Amount: ₹${totalAmount.toFixed(2)}`);
-//         navigate("/");
-//     };
-
-//     return (
-//         <div className="min-h-screen bg-gradient-to-r from-blue-600 to-purple-700 flex flex-col items-center p-6">
-//             <div className="bg-white p-6 rounded-lg shadow-xl max-w-3xl w-full">
-//                 <button onClick={() => navigate(-1)} className="flex items-center text-blue-500 font-semibold mb-4">
-//                     <FaArrowLeft className="mr-2" /> Back
-//                 </button>
-//                 <h1 className="text-3xl font-bold text-yellow-600 flex items-center justify-center mb-6">
-//                     <FaMoneyCheckAlt className="mr-2" /> Secure Payment
-//                 </h1>
-
-//                 <div className="p-4 bg-gray-200 shadow-md rounded-lg text-lg font-semibold text-gray-700 text-center">
-//                     Total Amount: <span className="text-green-600">₹{totalAmount.toFixed(2)}</span>
-//                 </div>
-
-//                 <h2 className="text-xl font-semibold mt-4">Select Payment Method:</h2>
-//                 <div className="grid grid-cols-2 gap-4 my-4">
-//                     {["upi", "card", "net banking", "cod"].map((method) => (
-//                         <button key={method} onClick={() => setPaymentMethod(method)}
-//                             className={`p-4 rounded-lg shadow-md flex items-center justify-center space-x-2 text-lg font-semibold w-full transition ${paymentMethod === method ? "bg-yellow-500 text-white" : "bg-white text-gray-800"}`}>
-//                             {method === "upi" && <FaMobileAlt />}
-//                             {method === "card" && <FaCreditCard />}
-//                             {method === "net banking" && <FaUniversity />}
-//                             {method === "cod" && <FaMoneyBillWave />}
-//                             <span className="capitalize">{method.replace("cod", "Cash on Delivery")}</span>
-//                         </button>
-//                     ))}
-//                 </div>
-//                 {paymentMethod === "upi" && (
-//                     <div className="flex flex-col items-center">
-//                         <p className="text-gray-600 mb-4">Scan the QR code to complete your UPI payment:</p>
-//                         <img src={QRCode} alt="QR Code" className="w-40 h-40 object-contain" />
-//                     </div>
-//                 )}
-
-//                 {paymentMethod === "card" && (
-//                     <div className="mt-4">
-//                         <h3 className="text-lg font-semibold mb-4">Enter Debit Card Details:</h3>
-//                         <div className="space-y-4">
-//                             <input
-//                                 type="text"
-//                                 placeholder="Card Number"
-//                                 value={debitCardDetails.cardNumber}
-//                                 onChange={(e) => setDebitCardDetails({ ...debitCardDetails, cardNumber: e.target.value })}
-//                                 className="w-full p-2 border border-gray-300 rounded-lg"
-//                             />
-//                             <input
-//                                 type="text"
-//                                 placeholder="Expiry Date (MM/YY)"
-//                                 value={debitCardDetails.expiryDate}
-//                                 onChange={(e) => setDebitCardDetails({ ...debitCardDetails, expiryDate: e.target.value })}
-//                                 className="w-full p-2 border border-gray-300 rounded-lg"
-//                             />
-//                             <input
-//                                 type="text"
-//                                 placeholder="CVV"
-//                                 value={debitCardDetails.cvv}
-//                                 onChange={(e) => setDebitCardDetails({ ...debitCardDetails, cvv: e.target.value })}
-//                                 className="w-full p-2 border border-gray-300 rounded-lg"
-//                             />
-//                         </div>
-//                     </div>
-//                 )}
-
-//                 {paymentMethod === "cod" && (
-//                     <div className="mt-4">
-//                         <h3 className="text-lg font-semibold mb-4">Enter Your Details for Cash on Delivery:</h3>
-//                         <div className="space-y-4">
-//                             <input
-//                                 type="text"
-//                                 placeholder="Name"
-//                                 value={userDetails.name}
-//                                 onChange={(e) => setUserDetails({ ...userDetails, name: e.target.value })}
-//                                 className="w-full p-2 border border-gray-300 rounded-lg"
-//                             />
-//                             <input
-//                                 type="text"
-//                                 placeholder="Address"
-//                                 value={userDetails.address}
-//                                 onChange={(e) => setUserDetails({ ...userDetails, address: e.target.value })}
-//                                 className="w-full p-2 border border-gray-300 rounded-lg"
-//                             />
-//                             <input
-//                                 type="text"
-//                                 placeholder="Phone Number"
-//                                 value={userDetails.phone}
-//                                 onChange={(e) => setUserDetails({ ...userDetails, phone: e.target.value })}
-//                                 className="w-full p-2 border border-gray-300 rounded-lg"
-//                             />
-//                         </div>
-//                     </div>
-//                 )}
-//                 {paymentMethod === "net banking" && (
-//                     <div className="mt-4">
-//                         <h3 className="text-lg font-semibold mb-4">Enter Your Details for Cash on Delivery:</h3>
-//                         <div className="space-y-4">
-                          
-//                             <input
-//                                 type="text"
-//                                 placeholder="Bank Name"
-//                                 value={userDetails.address}
-//                                 onChange={(e) => setUserDetails({ ...userDetails, address: e.target.value })}
-//                                 className="w-full p-2 border border-gray-300 rounded-lg"
-//                             />
-//                             <input
-//                                 type="text"
-//                                 placeholder="Account Number"
-//                                 value={userDetails.phone}
-//                                 onChange={(e) => setUserDetails({ ...userDetails, phone: e.target.value })}
-//                                 className="w-full p-2 border border-gray-300 rounded-lg"
-//                             />
-//                         </div>
-//                     </div>
-//                 )}
-
-//                 <button onClick={handleConfirmPayment}
-//                     className="mt-6 bg-green-500 text-white p-3 rounded-lg w-full text-lg font-semibold shadow-lg flex items-center justify-center hover:bg-green-600 transition">
-//                     <FaCheckCircle className="mr-2" /> Confirm Payment (₹{totalAmount.toFixed(2)})
-//                 </button>
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default Payment;
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { FaMoneyCheckAlt, FaCheckCircle, FaArrowLeft, FaMobileAlt, FaCreditCard, FaUniversity, FaMoneyBillWave } from "react-icons/fa";
-import QRCode from "../assets/images/qr-code.png";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Payment = () => {
-    const navigate = useNavigate();
-    const [cartItems, setCartItems] = useState([]);
-    const [totalAmount, setTotalAmount] = useState(0);
-    const [paymentMethod, setPaymentMethod] = useState("");
-    const [debitCardDetails, setDebitCardDetails] = useState({ cardNumber: "", expiryDate: "", cvv: "" });
-    const [netBankingDetails, setNetBankingDetails] = useState({ bankName: "", accountNumber: "" });
-    const [userDetails, setUserDetails] = useState({ name: "", address: "", phone: "" });
-    const bankOptions = ["HDFC Bank", "ICICI Bank", "State Bank of India", "Axis Bank", "Kotak Mahindra Bank"];
+  const [cartItems, setCartItems] = useState([]);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [paymentMethod, setPaymentMethod] = useState('');
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-        setCartItems(storedCart);
-        const storedTotal = parseFloat(localStorage.getItem("totalPrice")) || 0;
-        setTotalAmount(storedTotal);
-    }, []);
+  useEffect(() => {
+    // Retrieve cart details from localStorage
+    const storedItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    const storedTotal = localStorage.getItem('totalAmount') || '0';
+    setCartItems(storedItems);
+    setTotalAmount(parseFloat(storedTotal));
+  }, []);
 
-    const handleConfirmPayment = () => {
-        if (!paymentMethod) {
-            alert("Please select a payment method.");
-            return;
-        }
+  const handlePayment = () => {
+    if (!paymentMethod) {
+      alert('Please select a payment method.');
+      return;
+    }
 
-        if (paymentMethod === "cod" && (!userDetails.name || !userDetails.address || !userDetails.phone)) {
-            alert("Please fill in all user details for cash on delivery.");
-            return;
-        }
+    // Simulate payment processing based on method
+    let message = '';
+    switch (paymentMethod) {
+      case 'upi':
+        message = 'Processing UPI payment... (To be implemented)';
+        break;
+      case 'card':
+        message = 'Processing Card payment... (To be implemented)';
+        break;
+      case 'cod':
+        message = 'Order placed with Cash on Delivery!';
+        break;
+      default:
+        message = 'Payment processing...';
+    }
 
-        const storedOrders = JSON.parse(localStorage.getItem("orders")) || [];
-        const newOrder = {
-            id: Date.now(),
-            items: cartItems,
-            totalAmount: totalAmount,
-            status: "Paid",
-            paymentMethod: paymentMethod === "cod" ? "Cash on Delivery" : paymentMethod.toUpperCase(),
-            userDetails: paymentMethod === "cod" ? userDetails : null,
-        };
+    alert(message);
 
-        localStorage.setItem("orders", JSON.stringify([...storedOrders, newOrder]));
-        localStorage.removeItem("cart");
-        localStorage.removeItem("totalPrice");
-
-        alert(`Order Confirmed! Total Amount: ₹${totalAmount.toFixed(2)}`);
-        navigate("/");
+    // Save order to localStorage for AdminDashboard
+    const newOrder = {
+      id: Date.now(), // Unique ID based on timestamp
+      items: cartItems,
+      total: totalAmount,
+      paymentMethod,
+      status: 'Pending', // Initial status
+      date: new Date().toLocaleString(),
     };
+    const storedOrders = JSON.parse(localStorage.getItem('completedOrders')) || [];
+    localStorage.setItem('completedOrders', JSON.stringify([...storedOrders, newOrder]));
 
-    return (
-        <div className="min-h-screen bg-white flex flex-col items-center p-6">
-            <div className="bg-white p-6 rounded-lg shadow-xl max-w-3xl w-full">
-                <button onClick={() => navigate(-1)} className="flex items-center text-teal-500 font-semibold mb-4">
-                    <FaArrowLeft className="mr-2" /> Back
-                </button>
-                <h1 className="text-3xl font-bold text-teal-600 flex items-center justify-center mb-6">
-                    <FaMoneyCheckAlt className="mr-2" /> Secure Payment
-                </h1>
+    // Clear cart (except for COD if needed)
+    if (paymentMethod !== 'cod') {
+      localStorage.removeItem('cartItems');
+      localStorage.removeItem('totalAmount');
+    }
 
-                <div className="p-4 bg-gray-200 shadow-md rounded-lg text-lg font-semibold text-gray-700 text-center">
-                    Total Amount: <span className="text-green-600">₹{totalAmount.toFixed(2)}</span>
+    // Navigate to home page after a short delay
+    setTimeout(() => {
+      navigate('/');
+    }, 1000); // 1-second delay to allow user to see the alert
+  };
+
+  return (
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-gray-50 min-h-screen">
+      <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-8 text-center">
+        Payment
+      </h1>
+
+      {cartItems.length === 0 ? (
+        <p className="text-gray-600 text-center text-base sm:text-lg">
+          No items to process for payment.
+        </p>
+      ) : (
+        <div className="max-w-4xl mx-auto space-y-8">
+          {/* Order Summary */}
+          <div className="bg-white shadow-md rounded-lg p-4 sm:p-6">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
+              Order Summary
+            </h2>
+            <div className="space-y-4">
+              {cartItems.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex flex-col sm:flex-row sm:items-center justify-between py-3 border-b border-gray-200 last:border-b-0"
+                >
+                  <div className="flex items-center space-x-4">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-16 h-16 object-cover rounded-lg"
+                    />
+                    <div>
+                      <p className="text-base sm:text-lg text-gray-800 font-medium">
+                        {item.name}
+                      </p>
+                      <p className="text-gray-600 text-sm">
+                        {item.category} | {item.type} | {item.gender} | Age: {item.age} yrs
+                      </p>
+                      <p className="text-gray-600 text-sm">
+                        ${item.price} x {item.quantity}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-base sm:text-lg font-medium text-gray-900 mt-2 sm:mt-0">
+                    ${(item.price * item.quantity).toFixed(2)}
+                  </p>
                 </div>
-
-                <h2 className="text-xl font-semibold mt-4">Select Payment Method:</h2>
-                <div className="grid grid-cols-2 gap-4 my-4">
-                    {["upi", "card", "net banking", "cod"].map((method) => (
-                        <button key={method} onClick={() => setPaymentMethod(method)}
-                            className={`p-4 rounded-lg shadow-md flex items-center justify-center space-x-2 text-lg font-semibold w-full transition ${paymentMethod === method ? "bg-teal-500 text-white" : "bg-white text-gray-800"}`}>
-                            {method === "upi" && <FaMobileAlt />}
-                            {method === "card" && <FaCreditCard />}
-                            {method === "net banking" && <FaUniversity />}
-                            {method === "cod" && <FaMoneyBillWave />}
-                            <span className="capitalize">{method.replace("cod", "Cash on Delivery")}</span>
-                        </button>
-                    ))}
-                </div>
-                {paymentMethod === "upi" && (
-                    <div className="flex flex-col items-center">
-                        <p className="text-gray-600 mb-4">Scan the QR code to complete your UPI payment:</p>
-                        <img src={QRCode} alt="QR Code" className="w-40 h-40 object-contain" />
-                    </div>
-                )}
-
-{paymentMethod === "card" && (
-                    <div className="mt-4">
-                        <h3 className="text-lg font-semibold mb-4">Enter Debit Card Details:</h3>
-                        <div className="space-y-4">
-                            <input
-                                type="text"
-                                placeholder="Card Number"
-                                value={debitCardDetails.cardNumber}
-                                onChange={(e) => setDebitCardDetails({ ...debitCardDetails, cardNumber: e.target.value })}
-                                className="w-full p-2 border border-gray-300 rounded-lg"
-                            />
-                            <input
-                                type="text"
-                                placeholder="Expiry Date (MM/YY)"
-                                value={debitCardDetails.expiryDate}
-                                onChange={(e) => setDebitCardDetails({ ...debitCardDetails, expiryDate: e.target.value })}
-                                className="w-full p-2 border border-gray-300 rounded-lg"
-                            />
-                            <input
-                                type="text"
-                                placeholder="CVV"
-                                value={debitCardDetails.cvv}
-                                onChange={(e) => setDebitCardDetails({ ...debitCardDetails, cvv: e.target.value })}
-                                className="w-full p-2 border border-gray-300 rounded-lg"
-                            />
-                        </div>
-                    </div>
-                )}
-
-
-{paymentMethod === "net banking" && (
-                    <div className="mt-4">
-                        <h3 className="text-lg font-semibold mb-4">Enter Your Details for Cash on Delivery:</h3>
-                        <div className="space-y-4">
-                          
-                            <input
-                                type="text"
-                                placeholder="Bank Name"
-                                value={userDetails.address}
-                                onChange={(e) => setUserDetails({ ...userDetails, address: e.target.value })}
-                                className="w-full p-2 border border-gray-300 rounded-lg"
-                            />
-                            <input
-                                type="text"
-                                placeholder="Account Number"
-                                value={userDetails.phone}
-                                onChange={(e) => setUserDetails({ ...userDetails, phone: e.target.value })}
-                                className="w-full p-2 border border-gray-300 rounded-lg"
-                            />
-                        </div>
-                    </div>
-                )}
-
-                {paymentMethod === "cod" && (
-                    <div className="mt-4">
-                        <h3 className="text-lg font-semibold mb-4">Enter Your Details for Cash on Delivery:</h3>
-                        <div className="space-y-4">
-                            <input
-                                type="text"
-                                placeholder="Name"
-                                value={userDetails.name}
-                                onChange={(e) => setUserDetails({ ...userDetails, name: e.target.value })}
-                                className="w-full p-2 border border-gray-300 rounded-lg"
-                            />
-                            <input
-                                type="text"
-                                placeholder="Address"
-                                value={userDetails.address}
-                                onChange={(e) => setUserDetails({ ...userDetails, address: e.target.value })}
-                                className="w-full p-2 border border-gray-300 rounded-lg"
-                            />
-                            <input
-                                type="text"
-                                placeholder="Phone Number"
-                                value={userDetails.phone}
-                                onChange={(e) => setUserDetails({ ...userDetails, phone: e.target.value })}
-                                className="w-full p-2 border border-gray-300 rounded-lg"
-                            />
-                        </div>
-                    </div>
-                )}
-
-                <button onClick={handleConfirmPayment}
-                    className="mt-6 bg-teal-500 text-white p-3 rounded-lg w-full text-lg font-semibold shadow-lg flex items-center justify-center hover:bg-teal-600 transition">
-                    <FaCheckCircle className="mr-2" /> Confirm Payment (₹{totalAmount.toFixed(2)})
-                </button>
+              ))}
+              <div className="flex justify-between items-center pt-4">
+                <span className="text-lg sm:text-xl font-semibold text-gray-800">
+                  Total Amount:
+                </span>
+                <span className="text-xl sm:text-2xl font-bold text-gray-900">
+                  ${totalAmount.toFixed(2)}
+                </span>
+              </div>
             </div>
+          </div>
+
+          {/* Payment Options */}
+          <div className="bg-white shadow-md rounded-lg p-4 sm:p-6">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
+              Select Payment Method
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {/* UPI Option */}
+              <label
+                className={`flex items-center p-4 border rounded-lg cursor-pointer transition-colors duration-200 ${
+                  paymentMethod === 'upi'
+                    ? 'border-[#7E60BF] bg-purple-50'
+                    : 'border-gray-200 hover:border-[#7E60BF]'
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="payment"
+                  value="upi"
+                  checked={paymentMethod === 'upi'}
+                  onChange={() => setPaymentMethod('upi')}
+                  className="mr-3 accent-[#7E60BF]"
+                />
+                <span className="text-gray-700 font-medium">UPI</span>
+              </label>
+
+              {/* Card Option */}
+              <label
+                className={`flex items-center p-4 border rounded-lg cursor-pointer transition-colors duration-200 ${
+                  paymentMethod === 'card'
+                    ? 'border-[#7E60BF] bg-purple-50'
+                    : 'border-gray-200 hover:border-[#7E60BF]'
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="payment"
+                  value="card"
+                  checked={paymentMethod === 'card'}
+                  onChange={() => setPaymentMethod('card')}
+                  className="mr-3 accent-[#7E60BF]"
+                />
+                <span className="text-gray-700 font-medium">Credit/Debit Card</span>
+              </label>
+
+              {/* Cash on Delivery Option */}
+              <label
+                className={`flex items-center p-4 border rounded-lg cursor-pointer transition-colors duration-200 ${
+                  paymentMethod === 'cod'
+                    ? 'border-[#7E60BF] bg-purple-50'
+                    : 'border-gray-200 hover:border-[#7E60BF]'
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="payment"
+                  value="cod"
+                  checked={paymentMethod === 'cod'}
+                  onChange={() => setPaymentMethod('cod')}
+                  className="mr-3 accent-[#7E60BF]"
+                />
+                <span className="text-gray-700 font-medium">Cash on Delivery</span>
+              </label>
+            </div>
+          </div>
+
+          {/* Payment Button */}
+          <button
+            onClick={handlePayment}
+            className="w-full bg-[#7E60BF] text-white py-3 rounded-lg hover:bg-[#6A4EAA] transition-colors duration-300 font-semibold text-base sm:text-lg"
+          >
+            Complete Payment
+          </button>
         </div>
-    );
+      )}
+    </div>
+  );
 };
 
 export default Payment;

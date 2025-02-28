@@ -1,62 +1,68 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { FaUserShield, FaLock } from "react-icons/fa";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AdminLogin = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  // Predefined admin credentials (for demo purposes)
+  const ADMIN_USERNAME = 'admin';
+  const ADMIN_PASSWORD = 'admin123';
+
+  const handleLogin = (e) => {
     e.preventDefault();
-    if (username === "admin" && password === "admin123") {
-      navigate("/admin-dashboard");
+
+    // Validate credentials
+    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+      // Simulate successful login by storing a token in localStorage
+      localStorage.setItem('adminToken', 'authenticated');
+      setError('');
+      // Navigate to AdminDashboard
+      navigate('/admin-dashboard');
     } else {
-      alert("❌ Invalid credentials, please try again!");
+      setError('Invalid username or password');
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-teal-500 via-cyan-600 to-purple-700 p-6">
-      <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md text-center transform transition-all duration-500 hover:shadow-2xl">
-        {/* Icon */}
-        <FaUserShield className="text-5xl text-teal-600 mx-auto mb-6 animate-pulse" />
-
-        {/* Title */}
-        <h2 className="text-3xl md:text-4xl font-extrabold mb-8 text-gray-900 tracking-tight">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-gray-50 min-h-screen flex items-center justify-center">
+      <div className="max-w-md w-full bg-white shadow-md rounded-lg p-6 sm:p-8">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-6 text-center">
           Admin Login
-        </h2>
-
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Username Field */}
-          <div className="relative">
-            <FaUserShield className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500" />
+        </h1>
+        
+        <form onSubmit={handleLogin} className="space-y-6">
+          <div>
             <input
               type="text"
+              placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="Admin Username"
-              className="w-full p-4 pl-12 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7E60BF] text-gray-700"
+              required
             />
           </div>
-
-          {/* Password Field */}
-          <div className="relative">
-            <FaLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500" />
+          
+          <div>
             <input
               type="password"
+              placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              className="w-full p-4 pl-12 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7E60BF] text-gray-700"
+              required
             />
           </div>
 
-          {/* Submit Button */}
+          {error && (
+            <p className="text-red-500 text-sm text-center">{error}</p>
+          )}
+
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-teal-500 to-cyan-600 text-white p-4 rounded-xl text-lg font-semibold shadow-md hover:from-teal-600 hover:to-cyan-700 transform hover:scale-105 transition-all duration-300"
+            className="w-full bg-[#7E60BF] text-white py-3 rounded-lg hover:bg-[#6A4EAA] transition-colors duration-300 font-semibold text-base sm:text-lg"
           >
             Login
           </button>

@@ -1,223 +1,196 @@
-import React, { useState, useEffect } from "react";
-import { FaCheckCircle, FaTimesCircle, FaTrash, FaEdit, FaShoppingCart } from "react-icons/fa";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);
-  const [editOrder, setEditOrder] = useState(null);
-  const [updatedDetails, setUpdatedDetails] = useState({});
+  const [editingOrder, setEditingOrder] = useState(null);
+  const navigate = useNavigate();
 
+  // Check if admin is authenticated
   useEffect(() => {
-    const storedOrders = JSON.parse(localStorage.getItem("orders")) || [];
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+      navigate('/admin-login');
+    }
+  }, [navigate]);
+
+  // Load orders from localStorage
+  useEffect(() => {
+    const storedOrders = JSON.parse(localStorage.getItem('completedOrders')) || [];
     setOrders(storedOrders);
   }, []);
 
-  const handleOrderStatus = (orderId, newStatus) => {
+  // Edit order (start editing)
+  const startEditing = (order) => {
+    setEditingOrder({ ...order });
+  };
+
+  // Save edited order
+  const saveEditedOrder = () => {
     const updatedOrders = orders.map((order) =>
-      order.id === orderId ? { ...order, status: newStatus } : order
+      order.id === editingOrder.id ? editingOrder : order
     );
     setOrders(updatedOrders);
-    localStorage.setItem("orders", JSON.stringify(updatedOrders));
+    localStorage.setItem('completedOrders', JSON.stringify(updatedOrders));
+    setEditingOrder(null);
   };
 
-  const handleDeleteOrder = (orderId) => {
-    const updatedOrders = orders.filter((order) => order.id !== orderId);
+  // Delete order
+  const deleteOrder = (id) => {
+    const updatedOrders = orders.filter((order) => order.id !== id);
     setOrders(updatedOrders);
-    localStorage.setItem("orders", JSON.stringify(updatedOrders));
+    localStorage.setItem('completedOrders', JSON.stringify(updatedOrders));
   };
 
-  const handleEditOrder = (order) => {
-    setEditOrder(order);
-    setUpdatedDetails({ ...order.userDetails, totalAmount: order.totalAmount });
-  };
-
-  const handleSaveEdit = () => {
-    const updatedOrders = orders.map((order) =>
-      order.id === editOrder.id
-        ? { ...order, userDetails: updatedDetails, totalAmount: updatedDetails.totalAmount }
-        : order
-    );
-    setOrders(updatedOrders);
-    localStorage.setItem("orders", JSON.stringify(updatedOrders));
-    setEditOrder(null);
+  // Logout function
+  const handleLogout = () => {
+    localStorage.removeItem('adminToken');
+    navigate('/admin-login');
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex flex-col items-center py-8 px-4">
-      {/* Header */}
-      <h1 className="text-4xl font-extrabold text-gray-900 mb-8 flex items-center tracking-tight">
-        <FaShoppingCart className="mr-3 text-teal-600" /> Admin Dashboard - Orders
-      </h1>
+    <div className="min-h-screen bg-[#1F2A44] text-white p-6 sm:p-8 lg:p-12">
+      <div className="container mx-auto">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-10">
+          <h1 className="text-3xl sm:text-4xl font-bold font-['Poppins'] tracking-wide bg-gradient-to-r from-[#00DDEB] to-[#FF6F61] bg-clip-text text-transparent">
+            Admin Dashboard - Orders
+          </h1>
+          <button
+            onClick={handleLogout}
+            className="mt-4 sm:mt-0 bg-[#FF6F61] text-white px-5 py-2 rounded-full font-['Poppins'] font-semibold hover:bg-[#FF5240] transition-all duration-300 shadow-lg hover:shadow-[#FF6F61]/50"
+          >
+            Logout
+          </button>
+        </div>
 
-      {/* Orders Container */}
-      <div className="w-full max-w-5xl bg-white rounded-xl shadow-lg p-6">
+        {/* Orders List */}
         {orders.length === 0 ? (
-          <p className="text-gray-500 text-center text-lg font-medium">
-            No orders available.
+          <p className="text-center text-[#A0AEC0] text-lg font-['Roboto']">
+            No orders yet.
           </p>
         ) : (
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {orders.map((order) => (
               <div
                 key={order.id}
-                className="bg-gray-50 p-6 rounded-lg shadow-md border-l-4 border-teal-500 transition-all duration-300 hover:shadow-lg"
+                className="bg-[#2D3B55] rounded-xl shadow-lg p-5 hover:shadow-xl transition-all duration-300 border border-[#00DDEB]/20"
               >
-                <h2 className="text-xl font-semibold text-gray-800">
-                  Order ID: {order.id}
-                </h2>
-                <p className="text-gray-600 mt-1">
-                  Total Amount: ₹{(order.totalAmount ?? 0).toFixed(2)}
-                </p>
-                <p className="text-gray-600">
-                  Payment Method: {order.paymentMethod}
-                </p>
-                <p className="text-gray-600">
-                  Status:{" "}
-                  <span
-                    className={`font-semibold ${
-                      order.status === "Delivered"
-                        ? "text-green-600"
-                        : order.status === "Cancelled"
-                        ? "text-red-600"
-                        : "text-yellow-600"
-                    }`}
-                  >
-                    {order.status}
-                  </span>
-                </p>
-
-                {/* Items Ordered */}
-                <h3 className="text-md font-semibold text-gray-800 mt-4">
-                  Items Ordered:
-                </h3>
-                <ul className="list-disc ml-6 text-gray-600 mt-2">
-                  {order.items.map((item, index) => (
-                    <li key={index}>
-                      {item.name} - ₹{item.price} (x{item.quantity})
-                    </li>
-                  ))}
-                </ul>
-
-                {/* User Details */}
-                {order.userDetails && (
-                  <div className="mt-4 text-gray-600">
-                    <p>
-                      <strong>Name:</strong> {order.userDetails.name}
+                {editingOrder && editingOrder.id === order.id ? (
+                  <div className="space-y-4">
+                    <input
+                      type="number"
+                      value={editingOrder.total}
+                      onChange={(e) =>
+                        setEditingOrder({ ...editingOrder, total: parseFloat(e.target.value) })
+                      }
+                      className="w-full p-3 bg-[#1F2A44] text-white border border-[#00DDEB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00DDEB] transition-all"
+                      placeholder="Total Amount"
+                    />
+                    <select
+                      value={editingOrder.status}
+                      onChange={(e) =>
+                        setEditingOrder({ ...editingOrder, status: e.target.value })
+                      }
+                      className="w-full p-3 bg-[#1F2A44] text-white border border-[#00DDEB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00DDEB] transition-all"
+                    >
+                      <option value="Pending">Pending</option>
+                      <option value="Shipped">Shipped</option>
+                      <option value="Delivered">Delivered</option>
+                      <option value="Cancelled">Cancelled</option>
+                    </select>
+                    <select
+                      value={editingOrder.paymentMethod}
+                      onChange={(e) =>
+                        setEditingOrder({ ...editingOrder, paymentMethod: e.target.value })
+                      }
+                      className="w-full p-3 bg-[#1F2A44] text-white border border-[#00DDEB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00DDEB] transition-all"
+                    >
+                      <option value="upi">UPI</option>
+                      <option value="card">Credit/Debit Card</option>
+                      <option value="cod">Cash on Delivery</option>
+                    </select>
+                    <div className="flex gap-3">
+                      <button
+                        onClick={saveEditedOrder}
+                        className="flex-1 bg-[#00DDEB] text-[#1F2A44] px-4 py-2 rounded-lg font-['Poppins'] font-semibold hover:bg-[#00C4D1] transition-all duration-300 shadow-md"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={() => setEditingOrder(null)}
+                        className="flex-1 bg-[#A0AEC0] text-white px-4 py-2 rounded-lg font-['Poppins'] font-semibold hover:bg-[#8B97A8] transition-all duration-300 shadow-md"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <p className="text-[#E2E8F0] font-['Roboto']">
+                      <span className="font-medium text-[#00DDEB]">Order ID:</span> {order.id}
                     </p>
-                    <p>
-                      <strong>Address:</strong> {order.userDetails.address}
+                    <p className="text-[#E2E8F0] font-['Roboto']">
+                      <span className="font-medium text-[#00DDEB]">Date:</span> {order.date}
                     </p>
-                    <p>
-                      <strong>Phone:</strong> {order.userDetails.phone}
+                    <p className="text-[#E2E8F0] font-['Roboto']">
+                      <span className="font-medium text-[#00DDEB]">Payment:</span> {order.paymentMethod}
                     </p>
+                    <p className="text-[#E2E8F0] font-['Roboto']">
+                      <span className="font-medium text-[#00DDEB]">Status:</span> 
+                      <span className={`ml-2 px-2 py-1 rounded-full text-xs font-semibold ${
+                        order.status === 'Delivered' ? 'bg-green-500' :
+                        order.status === 'Shipped' ? 'bg-blue-500' :
+                        order.status === 'Pending' ? 'bg-yellow-500' :
+                        'bg-red-500'
+                      }`}>
+                        {order.status}
+                      </span>
+                    </p>
+                    <div className="mt-3 space-y-2">
+                      {order.items.map((item) => (
+                        <div key={item.id} className="flex items-center space-x-4">
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            className="w-10 h-10 object-cover rounded-full border border-[#00DDEB]/30"
+                          />
+                          <div className="text-left">
+                            <p className="text-[#E2E8F0] font-['Roboto'] font-medium">{item.name}</p>
+                            <p className="text-[#A0AEC0] text-xs">
+                              {item.category} | {item.type} | {item.gender}
+                            </p>
+                            <p className="text-[#A0AEC0] text-xs">
+                              ${item.price} x {item.quantity}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-lg font-semibold text-[#00DDEB] mt-3 font-['Poppins']">
+                      Total: ${order.total.toFixed(2)}
+                    </p>
+                    <div className="mt-4 flex gap-3">
+                      <button
+                        onClick={() => startEditing(order)}
+                        className="flex-1 bg-[#FFD700] text-[#1F2A44] px-4 py-2 rounded-lg font-['Poppins'] font-semibold hover:bg-[#FFC107] transition-all duration-300 shadow-md"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => deleteOrder(order.id)}
+                        className="flex-1 bg-[#FF6F61] text-white px-4 py-2 rounded-lg font-['Poppins'] font-semibold hover:bg-[#FF5240] transition-all duration-300 shadow-md"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </div>
                 )}
-
-                {/* Action Buttons */}
-                <div className="flex flex-wrap gap-3 mt-6">
-                  <button
-                    onClick={() => handleOrderStatus(order.id, "Delivered")}
-                    className="bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded-full flex items-center shadow-md hover:from-green-600 hover:to-green-700 transform hover:scale-105 transition-all duration-300"
-                  >
-                    <FaCheckCircle className="mr-2" /> Delivered
-                  </button>
-                  <button
-                    onClick={() => handleOrderStatus(order.id, "Cancelled")}
-                    className="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-full flex items-center shadow-md hover:from-red-600 hover:to-red-700 transform hover:scale-105 transition-all duration-300"
-                  >
-                    <FaTimesCircle className="mr-2" /> Cancel
-                  </button>
-                  <button
-                    onClick={() => handleEditOrder(order)}
-                    className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-full flex items-center shadow-md hover:from-blue-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-300"
-                  >
-                    <FaEdit className="mr-2" /> Edit
-                  </button>
-                  <button
-                    onClick={() => handleDeleteOrder(order.id)}
-                    className="bg-gradient-to-r from-gray-500 to-gray-600 text-white px-4 py-2 rounded-full flex items-center shadow-md hover:from-gray-600 hover:to-gray-700 transform hover:scale-105 transition-all duration-300"
-                  >
-                    <FaTrash className="mr-2" /> Delete
-                  </button>
-                </div>
               </div>
             ))}
           </div>
         )}
       </div>
-
-      {/* Edit Order Modal */}
-      {editOrder && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center p-4 z-50">
-          <div className="bg-white p-8 rounded-xl shadow-2xl max-w-lg w-full transform transition-all duration-300 scale-100 animate-fadeIn">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              Edit Order - ID: {editOrder.id}
-            </h2>
-            <div className="space-y-4">
-              <label className="block text-gray-700 font-medium">
-                Name:
-                <input
-                  type="text"
-                  value={updatedDetails.name || ""}
-                  onChange={(e) =>
-                    setUpdatedDetails({ ...updatedDetails, name: e.target.value })
-                  }
-                  className="mt-1 w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-teal-500"
-                />
-              </label>
-              <label className="block text-gray-700 font-medium">
-                Address:
-                <input
-                  type="text"
-                  value={updatedDetails.address || ""}
-                  onChange={(e) =>
-                    setUpdatedDetails({ ...updatedDetails, address: e.target.value })
-                  }
-                  className="mt-1 w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-teal-500"
-                />
-              </label>
-              <label className="block text-gray-700 font-medium">
-                Phone:
-                <input
-                  type="text"
-                  value={updatedDetails.phone || ""}
-                  onChange={(e) =>
-                    setUpdatedDetails({ ...updatedDetails, phone: e.target.value })
-                  }
-                  className="mt-1 w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-teal-500"
-                />
-              </label>
-              <label className="block text-gray-700 font-medium">
-                Total Amount:
-                <input
-                  type="number"
-                  value={updatedDetails.totalAmount || 0}
-                  onChange={(e) =>
-                    setUpdatedDetails({
-                      ...updatedDetails,
-                      totalAmount: parseFloat(e.target.value) || 0,
-                    })
-                  }
-                  className="mt-1 w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-teal-500"
-                />
-              </label>
-            </div>
-            <div className="flex justify-end gap-4 mt-6">
-              <button
-                onClick={handleSaveEdit}
-                className="bg-gradient-to-r from-teal-500 to-cyan-600 text-white px-6 py-2 rounded-full shadow-md hover:from-teal-600 hover:to-cyan-700 transition-all duration-300"
-              >
-                Save
-              </button>
-              <button
-                onClick={() => setEditOrder(null)}
-                className="bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-2 rounded-full shadow-md hover:from-red-600 hover:to-red-700 transition-all duration-300"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
